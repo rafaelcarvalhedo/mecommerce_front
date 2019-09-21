@@ -26,7 +26,7 @@ export class AppComponent {
           ]
         },
           {label: 'Open'},
-          {separator:true},
+          {separator: true},
           {label: 'Quit'}
         ]
       },

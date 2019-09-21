@@ -8,11 +8,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MegaMenuModule} from 'primeng/megamenu';
 import {MenubarModule} from 'primeng/menubar';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { CardContainerComponent } from './shared/card-container/card-container.component';
+import { InputTypeaheadComponent } from './shared/input-typeahead/input-typeahead.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    CardContainerComponent,
+    InputTypeaheadComponent
   ],
   imports: [
     BrowserModule,
