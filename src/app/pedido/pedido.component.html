@@ -1,0 +1,42 @@
+
+<form [formGroup]="orderForm" #formDir="ngForm">
+  <app-card-container>
+
+    <app-car-title>
+      <img *ngIf="model == null" src="/assets/icons/icone-cliente.png" height="20">
+      Cliente
+    </app-car-title>
+    <app-input-typeahead required #costumer placeholder="Informe um cliente *" [search]="searchCustomer" [model]="customer" [formatter]="formatter"></app-input-typeahead>
+
+  </app-card-container>
+
+  <app-card-container>
+
+    <app-car-title>
+      <img *ngIf="model == null" src="/assets/icons/icone-carrinho.png" height="20">
+      Carrinho
+    </app-car-title>
+    <app-input-typeahead placeholder="Pesquise um produto" (onSelect)="onSelectProduct($event)" [search]="searchProduct" [model]="product" [formatter]="formatter"></app-input-typeahead>
+
+
+    <div class="mt-3 text-center container">
+      <div *ngIf="orderItens.controls.length <= 0 ">
+        <div class="col-12 ">
+          <img src="/assets/icons/imagem-carrinho-empty-state.png" width="15%" alt="">
+        </div>
+        <div class="col-12 mt-2">
+          <h3 class="font-weight-bold dark-color">Carrinho Vazio</h3>
+        </div>
+        <div class="col-12">
+          <p class="dark-color">Nenhum produto inserido</p>
+        </div>
+      </div>
+      <div *ngIf="orderItens.controls.length > 0 " formArrayName="itens">
+        <div *ngFor="let orderItem of orderItens.controls">
+          <app-order-item [orderItem]="orderItem.value"></app-order-item>
+        </div>
+      </div>
+    </div>
+  </app-card-container>
+</form>
+

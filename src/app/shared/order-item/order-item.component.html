@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="pl-0 col-2 text-left∑">
+    <img src="/assets/icons/foto-coca-cola.png"  class="rounded img-fluid" alt="">
+  </div>
+  <div class="col-6 text-left">
+
+    <div class="row align-content-center h-100">
+      <div class="w-100">
+        <p class="m-0" [innerHtml]="orderItem.product.codigo"></p>
+      </div>
+      <div class="w100">
+        <h6 class="font-weight-bold m-0" [innerHtml]="orderItem.product.nome"></h6>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="col-4 text-right">
+    <div class="row h-100 justify-content-center">
+      <div class="col-9 h-100 row align-content-center align-items-center justify-content-end">
+        <div class="row  w-100 justify-content-end align-items-end">
+          <p [innerHtml]="orderItem.qty" class="rounded text-center qty-item m-0"></p>
+          <h6 class="m-0 ml-2" [innerHtml]="' x ' + (orderItem.product.precoUnitario | currency:'BRL')"></h6>
+        </div>
+        <div class="row  w-100 align-content-end justify-content-end">
+          <h6 class="font-weight-bold"
+              [innerHtml]="(orderItem.product.precoUnitario * orderItem.qty | currency:'BRL')"></h6>
+        </div>
+
+      </div>
+      <div class="col-auto col-3 col-md-4">
+
+        <div class=" w-100 h-100 align-content-center justify-content-end align-items-center remove-button-container" >
+          <div class="remove-button rounded-circle ">
+            X
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+
+  </div>
+</div>

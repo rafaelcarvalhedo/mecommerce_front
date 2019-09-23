@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,23 +10,41 @@ import {MenubarModule} from 'primeng/menubar';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { CardContainerComponent } from './shared/card-container/card-container.component';
 import { InputTypeaheadComponent } from './shared/input-typeahead/input-typeahead.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+import { PedidoComponent } from './pedido/pedido.component';
+import {RestApiService} from './shared/rest-api.service';
+import {ProdutoService} from './pedido/shared/produto.service';
+import { CardTitleComponent } from './shared/card-title/card-title.component';
+import {ClienteService} from './pedido/shared/cliente.service';
+import { OrderItemComponent } from './shared/order-item/order-item.component';
+import localePt from '@angular/common/locales/pt';
+import {registerLocaleData} from '@angular/common';
+
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     CardContainerComponent,
-    InputTypeaheadComponent
+    InputTypeaheadComponent,
+    PedidoComponent,
+    CardTitleComponent,
+    OrderItemComponent,
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     MenubarModule,
     MegaMenuModule,
     BrowserAnimationsModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [RestApiService, ProdutoService, ClienteService, { provide: LOCALE_ID, useValue: 'pt-BR' }    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

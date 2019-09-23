@@ -12,8 +12,8 @@
             Cadastro
           </a>
           <div ngbDropdownMenu aria-labelledby="navbarDropdown2" class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Cliente</a>
-            <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Produto</a>
+            <a class="dropdown-item" >Cliente</a>
+            <a class="dropdown-item" routerLink="/product"  routerLinkActive="active">Produto</a>
           </div>
         </li>
 
@@ -22,7 +22,7 @@
             Pedido
           </a>
           <div ngbDropdownMenu aria-labelledby="navbarDropdown2" class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Novo Pedido</a>
+            <a class="dropdown-item" routerLink="/pedido"  routerLinkActive="active">Novo Pedido</a>
             <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Consulta Pedido</a>
           </div>
         </li>
