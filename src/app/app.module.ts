@@ -14,12 +14,15 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { PedidoComponent } from './pedido/pedido.component';
 import {RestApiService} from './shared/rest-api.service';
-import {ProdutoService} from './pedido/shared/produto.service';
+import {ProductService} from './shared/product.service';
 import { CardTitleComponent } from './shared/card-title/card-title.component';
-import {ClienteService} from './pedido/shared/cliente.service';
+import {CustomerService} from './shared/customer.service';
 import { OrderItemComponent } from './shared/order-item/order-item.component';
 import localePt from '@angular/common/locales/pt';
 import {registerLocaleData} from '@angular/common';
+import {FreightService} from './shared/freight.service';
+import {OrderService} from './shared/order.service';
+import { PedidoListComponent } from './pedido-list/pedido-list.component';
 
 registerLocaleData(localePt);
 
@@ -32,6 +35,7 @@ registerLocaleData(localePt);
     PedidoComponent,
     CardTitleComponent,
     OrderItemComponent,
+    PedidoListComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,7 +48,7 @@ registerLocaleData(localePt);
     NgbModule,
     HttpClientModule
   ],
-  providers: [RestApiService, ProdutoService, ClienteService, { provide: LOCALE_ID, useValue: 'pt-BR' }    ],
+  providers: [RestApiService, ProductService, CustomerService, FreightService, OrderService, { provide: LOCALE_ID, useValue: 'pt-BR' }    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

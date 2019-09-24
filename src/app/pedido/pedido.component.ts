@@ -1,13 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {ProdutoService} from './shared/produto.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ProductService} from '../shared/product.service';
 import {Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs/internal/operators';
-import {ClienteService} from './shared/cliente.service';
-import {Costumer} from './shared/cliente.model';
+import {CustomerService} from '../shared/customer.service';
+import {Costumer} from './shared/customer.model';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Product} from './shared/product.model';
 import {Order} from './shared/order.model';
 import {OrderItem} from './shared/order-item.model';
+import {NgbTypeaheadSelectItemEvent} from '@ng-bootstrap/ng-bootstrap/typeahead/typeahead';
+import {FreightService} from '../shared/freight.service';
+import {OrderService} from '../shared/order.service';
 
 @Component({
   selector: 'app-produto',
@@ -18,19 +21,35 @@ export class PedidoComponent implements OnInit {
 
   customer: Costumer;
   orderForm: FormGroup;
+  product: any;
 
-  constructor(private produtoService: ProdutoService, private clienteService: ClienteService) {
+  freight: Freight = {totalFreight: 0};
+
+  constructor(private freightService: FreightService,
+              private produtoService: ProductService,
+              private clienteService: CustomerService,
+              private orderService: OrderService) {
     this.orderForm = new FormGroup({
-      costumer: new FormControl(null, [
+      customer: new FormControl(null, [
         Validators.required,
         Validators.nullValidator,
       ]),
-      itens:  new FormArray([])
+      items: new FormArray([]),
+      totalFreight: new FormControl(0.0, [
+        Validators.required,
+        Validators.nullValidator,
+      ]),
     });
   }
 
   ngOnInit() {
-    console.log(this.produtoService);
+  }
+
+  processFreightTax() {
+    this.freightService.processTaxFreight(this.totalItens).subscribe(freight => {
+      this.freight = freight;
+      this.orderForm.get('totalFreight').setValue(this.freight.totalFreight);
+    });
   }
 
   searchProduct = (text$: Observable<string>) =>
@@ -52,22 +71,51 @@ export class PedidoComponent implements OnInit {
         }))))
 
   onSelectProduct(event) {
-    console.log(event);
+    this.product = {};
     this.addItem(event.item);
   }
 
   private addItem(item: Product) {
     const itensForm: FormArray = this.orderItens;
-    itensForm.controls.push(new FormControl({product: item ,qty : 1}, Validators.compose([Validators.required, Validators.nullValidator])));
+    itensForm.controls
+      .push(new FormControl({product: item, qty: 1}, Validators.compose([Validators.required, Validators.nullValidator])));
     console.log(this.orderForm);
+    this.orderForm.get('items').updateValueAndValidity({emitEvent: true});
+    this.processFreightTax();
+  }
+
+  private onRemoveItem(i: number) {
+    const itensForm: FormArray = this.orderItens;
+    itensForm.controls.splice(i, 1);
+  }
+
+  private onCleanOrder() {
+    this.orderItens.controls = [];
+    this.orderForm.get('totalFreight').setValue(0);
+    this.freight = {totalFreight: 0};
+  }
+
+  submit() {
+    console.log(this.orderForm.value);
+    this.orderService.sendOrder(this.orderForm.value).subscribe(value => {
+      console.log(value);
+    });
   }
 
   formatter = (x: any) => {
-    return x.nome;
+    return x.name;
+  }
+
+  get totalItens() {
+    return this.orderItens.controls.map(v => v.value).map(v => Number(v.qty)).reduce((a, b) => a + b, 0);
+  }
+
+  get orderTotal() {
+    return this.orderItens.controls.map(v => v.value).map(v => v.product.unitPrice * v.qty).reduce((a, b) => a + b, 0);
   }
 
   get orderItens() {
-    return this.orderForm.controls.itens as FormArray;
+    return this.orderForm.controls.items as FormArray;
   }
 
 }

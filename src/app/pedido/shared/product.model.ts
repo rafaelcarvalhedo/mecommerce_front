@@ -1,5 +1,5 @@
 export class Product {
   codigo: number;
-  nome: string;
-  precoUnitario: number;
+  name: string;
+  unitPrice: number;
 }

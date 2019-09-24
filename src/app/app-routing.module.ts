@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {HomeComponent} from './home/home.component';
 import {PedidoComponent} from './pedido/pedido.component';
+import {PedidoListComponent} from './pedido-list/pedido-list.component';
 
 export const routes: Routes = [
   {
@@ -14,9 +15,13 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'pedido',
+    path: 'order',
     component: PedidoComponent
   },
+  {
+    path : 'orders',
+    component : PedidoListComponent
+  }
 ];
 
 @NgModule({

@@ -1,11 +1,20 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
-import {ControlValueAccessor} from '@angular/forms';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {NgbTypeaheadSelectItemEvent} from '@ng-bootstrap/ng-bootstrap/typeahead/typeahead';
+import {OrderItemComponent} from '../order-item/order-item.component';
 
 @Component({
   selector: 'app-input-typeahead',
   templateUrl: './input-typeahead.component.html',
-  styleUrls: ['./input-typeahead.component.scss']
+  styleUrls: ['./input-typeahead.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputTypeaheadComponent),
+      multi: true
+    }
+  ]
 })
 export class InputTypeaheadComponent implements OnInit, ControlValueAccessor {
 
@@ -19,14 +28,26 @@ export class InputTypeaheadComponent implements OnInit, ControlValueAccessor {
   @Input()
   placeholder: string;
   @Output()
-  onSelect: EventEmitter = new EventEmitter();
+  onSelect: EventEmitter<NgbTypeaheadSelectItemEvent> = new EventEmitter<NgbTypeaheadSelectItemEvent>();
+
+  onChangeFn: any;
+  onTouchedFn: any;
 
   constructor() { }
 
   ngOnInit() {
   }
-  onSelectItem($event){
+
+  onSelectItem($event) {
     this.onSelect.emit($event);
+    if (this.onChangeFn) {
+      this.onChangeFn($event.item);
+    }
+  }
+  onBlur($event) {
+    if (this.onTouchedFn) {
+      this.onTouchedFn();
+    }
   }
 
   clearValue() {
@@ -37,8 +58,10 @@ export class InputTypeaheadComponent implements OnInit, ControlValueAccessor {
   }
 
   registerOnChange(fn: any): void {
+    this.onChangeFn = fn;
   }
 
   registerOnTouched(fn: any): void {
+    this.onTouchedFn = fn;
   }
 }

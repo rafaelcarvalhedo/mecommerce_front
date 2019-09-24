@@ -19,25 +19,21 @@ export class RestApiService {
     })
   };
 
-  get<T>(path: string): Observable<T> {
-    return this.http.get<T>(this.getUrl(path)
-      , this.httpOptions)
+  get<T>(path: string, params?: any): Observable<T> {
+    return this.http.get<T>(this.getUrl(path), {headers : this.httpOptions.headers, params})
       .pipe(
-        retry(1),
         catchError(this.handleError)
       );
   }
-  getPageable<T>(path: string, params?: any): Observable<Pageable<T>> {
-    return this.http.get<Pageable<T>>(this.getUrl(path), {headers : this.httpOptions.headers, params})
+  getPageable<T>(path: string, params?: any): Observable<Page<T>> {
+    return this.http.get<Page<T>>(this.getUrl(path), {headers : this.httpOptions.headers, params})
       .pipe(
-        retry(1),
         catchError(this.handleError)
       );
   }
   post<T>(path, obj?: any): Observable<T> {
-    return this.http.post<T>(this.getUrl(path), obj, this.httpOptions)
+    return this.http.post<T>(this.getUrl(path), obj,  this.httpOptions)
       .pipe(
-        retry(1),
         catchError(this.handleError)
       );
   }
@@ -55,13 +51,25 @@ export class RestApiService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
+    console.warn(error);
     return throwError(errorMessage);
   }
 
 
 }
-
-class Pageable<T> {
+export class Page<T> {
   content: Array<T>;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  numberOfElements: number;
+  pageable: Pageable;
+
+}
+
+export class Pageable {
+  pageNumber: number;
+  pageSize: number;
+  offset:number;
 
 }
